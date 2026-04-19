@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Restaurant Me Gustar — Fruits de Mer — Casablanca</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;scroll-behavior:smooth}
+    :root{--navy:#0d2b3e;--gold:#c8963e;--cream:#fdf8f0;--text:#2a1f14;--muted:#6b5a47}
+    body{font-family:'Lato',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
+
+    /* ── NAV ── */
+    nav{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(13,43,62,0.96);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:space-between;padding:.85rem 2rem;transition:box-shadow .3s}
+    nav.scrolled{box-shadow:0 4px 24px rgba(0,0,0,.3)}
+    .nav-logo{font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;text-decoration:none}
+    .nav-logo em{color:var(--gold);font-style:italic}
+    .nav-links{display:flex;gap:1.8rem;list-style:none}
+    .nav-links a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.82rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:color .2s}
+    .nav-links a:hover{color:var(--gold)}
+    .nav-cta{background:var(--gold);color:var(--navy);padding:.4rem 1rem;border-radius:20px;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-decoration:none;transition:opacity .2s}
+    .nav-cta:hover{opacity:.85}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+    .hamburger span{width:22px;height:2px;background:#fff;border-radius:2px;transition:all .3s}
+    .mobile-menu{display:none;position:fixed;top:56px;left:0;right:0;background:var(--navy);padding:1.5rem 2rem;z-index:998;flex-direction:column;gap:1.2rem}
+    .mobile-menu.open{display:flex}
+    .mobile-menu a{color:rgba(255,255,255,.8);text-decoration:none;font-size:.9rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+
+    /* ── HOMEPAGE HERO ── */
+    #home{min-height:100vh;background:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6rem 2rem 4rem;position:relative;overflow:hidden}
+    #home::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23c8963e' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+    .hero-icon{font-size:3.5rem;margin-bottom:1.2rem;animation:float 3s ease-in-out infinite}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+    .hero-tag{font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;opacity:0;animation:fadeUp .7s .2s forwards}
+    .hero-h1{font-family:'Playfair Display',serif;font-size:3.8rem;font-weight:600;color:#fff;line-height:1.1;margin-bottom:.6rem;opacity:0;animation:fadeUp .7s .4s forwards}
+    .hero-h1 em{color:var(--gold);font-style:italic}
+    .hero-sub{font-size:1.05rem;font-weight:300;color:rgba(255,255,255,.6);margin-bottom:2.2rem;opacity:0;animation:fadeUp .7s .6s forwards}
+    .hero-btns{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;opacity:0;animation:fadeUp .7s .8s forwards}
+    .btn-primary{background:var(--gold);color:var(--navy);padding:.8rem 2rem;border-radius:30px;font-weight:700;font-size:.88rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;transition:opacity .2s}
+    .btn-primary:hover{opacity:.85}
+    .btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.35);padding:.8rem 2rem;border-radius:30px;font-weight:700;font-size:.88rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;transition:all .2s}
+    .btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+    .hero-stats{display:flex;gap:3rem;margin-top:3.5rem;opacity:0;animation:fadeUp .7s 1s forwards}
+    .stat{text-align:center}
+    .stat-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:600;color:var(--gold)}
+    .stat-label{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:2px}
+    .scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;opacity:.5;animation:bounce 2s infinite}
+    .scroll-hint span{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:#fff}
+    .scroll-arrow{width:20px;height:20px;border-right:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(45deg)}
+    @keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+
+    /* ── ABOUT STRIP ── */
+    .about-strip{background:var(--gold);padding:1.5rem 2rem;display:flex;justify-content:center;align-items:center;gap:3rem;flex-wrap:wrap}
+    .about-item{display:flex;align-items:center;gap:.6rem;font-size:.85rem;font-weight:700;color:var(--navy)}
+
+    /* ── SECTION BASE ── */
+    .section{padding:5rem 1.5rem;max-width:980px;margin:0 auto}
+    .section-label{font-size:.68rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem}
+    .section-title{font-family:'Playfair Display',serif;font-size:2rem;color:var(--navy);margin-bottom:.5rem}
+    .section-line{width:48px;height:3px;background:var(--gold);border-radius:2px;margin-bottom:2rem}
+
+    /* ── FADE-IN ON SCROLL ── */
+    .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease, transform .7s ease}
+    .reveal.visible{opacity:1;transform:none}
+    .reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .7s ease, transform .7s ease}
+    .reveal-left.visible{opacity:1;transform:none}
+    .reveal-right{opacity:0;transform:translateX(40px);transition:opacity .7s ease, transform .7s ease}
+    .reveal-right.visible{opacity:1;transform:none}
+
+    /* ── SPECIALTIES ── */
+    .specials-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.2rem}
+    .special-card{background:#fff;border-radius:16px;padding:1.8rem 1.2rem;text-align:center;border:1px solid rgba(200,150,62,.15);transition:transform .25s,box-shadow .25s}
+    .special-card:hover{transform:translateY(-5px);box-shadow:0 12px 32px rgba(13,43,62,.1)}
+    .special-icon{font-size:2.4rem;margin-bottom:.8rem}
+    .special-name{font-family:'Playfair Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.4rem}
+    .special-price{font-size:.82rem;font-weight:700;color:var(--gold)}
+
+    /* ── MENU ── */
+    .cat-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem}
+    .cat-tab{background:#fff;border:1px solid rgba(200,150,62,.35);color:var(--muted);padding:.42rem .9rem;border-radius:20px;font-size:.76rem;font-weight:700;letter-spacing:.07em;cursor:pointer;transition:all .2s}
+    .cat-tab.active,.cat-tab:hover{background:var(--gold);color:var(--navy);border-color:var(--gold)}
+    .food-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.1rem}
+    .food-card{background:#fff;border-radius:14px;overflow:hidden;border:1px solid rgba(200,150,62,.15);transition:transform .22s,box-shadow .22s}
+    .food-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(13,43,62,.1)}
+    .food-card.hidden{display:none}
+    .food-img-placeholder{width:100%;height:145px;display:flex;align-items:center;justify-content:center;font-size:2.8rem}
+    .food-img-placeholder.plats{background:linear-gradient(135deg,#fde8cc,#f5c990)}
+    .food-img-placeholder.tajines{background:linear-gradient(135deg,#ffe0cc,#f5a87a)}
+    .food-img-placeholder.pizzas{background:linear-gradient(135deg,#fff0cc,#f5d67a)}
+    .food-img-placeholder.salades{background:linear-gradient(135deg,#d4f5d4,#8ed98e)}
+    .food-img-placeholder.boissons{background:linear-gradient(135deg,#cce8ff,#7ab8f5)}
+    .food-body{padding:.9rem}
+    .food-name{font-size:.88rem;font-weight:700;color:var(--navy);margin-bottom:.22rem}
+    .food-desc{font-size:.71rem;color:var(--muted);margin-bottom:.75rem;line-height:1.5}
+    .food-footer{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+    .food-price{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;color:var(--gold);white-space:nowrap}
+    .add-btn{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:.38rem .8rem;font-size:.74rem;font-weight:700;cursor:pointer;transition:background .2s,transform .1s;white-space:nowrap}
+    .add-btn:hover{background:var(--gold);color:var(--navy)}
+    .add-btn:active{transform:scale(.95)}
+    .add-btn.added{background:#2d7a4f}
+
+    /* ── REVIEWS SLIDER ── */
+    #reviews{background:#fff;padding:5rem 0}
+    .reviews-inner{max-width:980px;margin:0 auto;padding:0 1.5rem}
+    .slider-wrap{position:relative;overflow:hidden;margin-top:2.5rem}
+    .slider-track{display:flex;transition:transform .55s cubic-bezier(.4,0,.2,1);will-change:transform}
+    .review-slide{min-width:320px;max-width:320px;margin-right:1.2rem;background:var(--cream);border-radius:16px;padding:1.6rem;border:1px solid rgba(200,150,62,.18);flex-shrink:0}
+    .rev-header{display:flex;align-items:center;gap:.8rem;margin-bottom:.9rem}
+    .rev-avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.85rem;flex-shrink:0}
+    .rev-name{font-size:.88rem;font-weight:700;color:var(--navy)}
+    .rev-date{font-size:.7rem;color:var(--muted);margin-top:2px}
+    .rev-stars{color:var(--gold);font-size:.95rem;margin-bottom:.6rem;letter-spacing:2px}
+    .rev-text{font-size:.8rem;color:var(--muted);line-height:1.7}
+    .rev-quote{font-size:2rem;color:var(--gold);opacity:.3;line-height:1;margin-bottom:.3rem}
+    .slider-controls{display:flex;align-items:center;gap:1rem;margin-top:1.8rem}
+    .slider-btn{width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(200,150,62,.4);background:#fff;color:var(--navy);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+    .slider-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+    .slider-dots{display:flex;gap:6px}
+    .dot{width:8px;height:8px;border-radius:50%;background:rgba(200,150,62,.25);cursor:pointer;transition:all .3s}
+    .dot.active{background:var(--gold);width:22px;border-radius:4px}
+
+    /* ── CONTACT ── */
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+    .contact-card{background:var(--navy);border-radius:16px;padding:2.2rem 2rem}
+    .c-label{font-size:.63rem;text-transform:uppercase;letter-spacing:.18em;color:rgba(255,255,255,.4);margin-bottom:5px}
+    .c-value{font-size:.95rem;font-weight:700;color:#fff}
+    .c-value a{color:var(--gold);text-decoration:none}
+    .map-card{background:linear-gradient(135deg,#1a3a52,#0d2b3e);border-radius:16px;padding:2.2rem 2rem;display:flex;flex-direction:column;justify-content:space-between}
+    .map-card p{font-size:.82rem;color:rgba(255,255,255,.6);line-height:1.7;margin-bottom:1.2rem}
+    .map-btn{display:inline-block;background:var(--gold);color:var(--navy);font-weight:700;font-size:.8rem;letter-spacing:.08em;padding:.6rem 1.4rem;border-radius:24px;text-decoration:none;transition:opacity .2s}
+    .map-btn:hover{opacity:.85}
+
+    /* ── CART ── */
+    .cart-bar{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(100px);background:var(--navy);color:#fff;border-radius:40px;padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;box-shadow:0 8px 32px rgba(0,0,0,.35);z-index:1000;transition:transform .4s cubic-bezier(.4,0,.2,1);white-space:nowrap}
+    .cart-bar.visible{transform:translateX(-50%) translateY(0)}
+    .cart-count{background:var(--gold);color:var(--navy);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0}
+    .cart-label{font-size:.84rem;font-weight:700}
+    .cart-total{font-family:'Playfair Display',serif;font-size:.95rem;font-weight:600;color:var(--gold)}
+    .order-btn{background:#25D366;color:#fff;border:none;border-radius:24px;padding:.48rem 1.1rem;font-size:.8rem;font-weight:700;cursor:pointer;transition:opacity .2s}
+    .order-btn:hover{opacity:.85}
+    .cart-clear{background:none;border:none;color:rgba(255,255,255,.35);font-size:.7rem;cursor:pointer;text-decoration:underline}
+    .cart-clear:hover{color:rgba(255,255,255,.65)}
+
+    footer{text-align:center;padding:2rem;background:var(--navy);color:rgba(255,255,255,.3);font-size:.76rem}
+    footer a{color:var(--gold);text-decoration:none}
+
+    /* ── RESERVATION ── */
+    #reservation{background:var(--navy);padding:5rem 1.5rem}
+    .reservation-inner{max-width:680px;margin:0 auto}
+    .reservation-inner .section-label{color:var(--gold)}
+    .reservation-inner .section-title{color:#fff}
+    .reservation-inner .section-line{background:var(--gold)}
+    .res-form{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem}
+    .res-form .full{grid-column:1/-1}
+    .res-label{display:block;font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:.4rem}
+    .res-input{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:.75rem 1rem;color:#fff;font-family:'Lato',sans-serif;font-size:.88rem;outline:none;transition:border .2s}
+    .res-input:focus{border-color:var(--gold)}
+    .res-input::placeholder{color:rgba(255,255,255,.3)}
+    select.res-input option{background:var(--navy);color:#fff}
+    .res-btn{grid-column:1/-1;background:var(--gold);color:var(--navy);border:none;border-radius:30px;padding:.9rem 2rem;font-family:'Lato',sans-serif;font-size:.9rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:opacity .2s;margin-top:.5rem}
+    .res-btn:hover{opacity:.85}
+    .res-success{display:none;grid-column:1/-1;background:rgba(45,122,79,.2);border:1px solid rgba(45,122,79,.5);border-radius:12px;padding:1.2rem;text-align:center;color:#7de0a0;font-size:.9rem;font-weight:700}
+
+    /* ── MAP ── */
+    #map-section{padding:5rem 1.5rem;max-width:980px;margin:0 auto}
+    .map-embed-wrap{border-radius:16px;overflow:hidden;border:2px solid rgba(200,150,62,.2);box-shadow:0 8px 32px rgba(13,43,62,.1);margin-top:2rem}
+    .map-embed-wrap iframe{display:block;width:100%;height:400px;border:none}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+
+    @media(max-width:700px){
+      .hero-h1{font-size:2.4rem}
+      .hero-stats{gap:1.8rem}
+      .nav-links,.nav-cta{display:none}
+      .hamburger{display:flex}
+      .contact-grid{grid-template-columns:1fr}
+      .review-slide{min-width:280px;max-width:280px}
+      .food-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+      .cart-bar{left:1rem;right:1rem;transform:translateY(100px);border-radius:16px;flex-wrap:wrap}
+      .cart-bar.visible{transform:translateY(0)}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#home" class="nav-logo">Me <em>Gustar</em></a>
+  <ul class="nav-links">
+    <li><a href="#home">Accueil</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#reservation">Réserver</a></li>
+    <li><a href="#reviews">Avis</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="tel:0721624891" class="nav-cta">📞 Réserver</a>
+  <button class="hamburger" onclick="toggleMobile()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#home" onclick="toggleMobile()">Accueil</a>
+  <a href="#menu" onclick="toggleMobile()">Menu</a>
+  <a href="#reservation" onclick="toggleMobile()">Réserver</a>
+  <a href="#reviews" onclick="toggleMobile()">Avis</a>
+  <a href="#contact" onclick="toggleMobile()">Contact</a>
+  <a href="tel:0721624891" style="color:var(--gold)">📞 07 21 62 48 91</a>
+</div>
+
+<!-- HOME -->
+<section id="home">
+  <div class="hero-tag">Restaurant de Fruits de Mer</div>
+  <div class="hero-icon">🦞</div>
+  <h1 class="hero-h1">Restaurant <em>Me Gustar</em></h1>
+  <p class="hero-sub">La fraîcheur de la mer dans votre assiette — Casablanca</p>
+  <div class="hero-btns">
+    <a href="#menu" class="btn-primary">Voir le menu</a>
+    <a href="#reviews" class="btn-outline">Lire les avis</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">4.4★</div><div class="stat-label">Note moyenne</div></div>
+    <div class="stat"><div class="stat-num">58+</div><div class="stat-label">Avis clients</div></div>
+    <div class="stat"><div class="stat-num">50dh</div><div class="stat-label">À partir de</div></div>
+  </div>
+  <div class="scroll-hint"><span>Défiler</span><div class="scroll-arrow"></div></div>
+</section>
+
+<!-- ABOUT STRIP -->
+<div class="about-strip">
+  <div class="about-item">🕙 11h00 – 22h30</div>
+  <div class="about-item">📍 Sidi Moumen, Casablanca</div>
+  <div class="about-item">📞 <a href="tel:0721624891" style="color:var(--navy)">07 21 62 48 91</a></div>
+  <div class="about-item">🐟 Fruits de mer frais</div>
+</div>
+
+<!-- SPECIALTIES -->
+<div class="section">
+  <div class="section-label reveal">Nos Spécialités</div>
+  <div class="section-title reveal">Ce que l'on adore chez nous</div>
+  <div class="section-line reveal"></div>
+  <div class="specials-grid">
+    <div class="special-card reveal" style="transition-delay:.05s">
+      <div class="special-icon">🥘</div>
+      <div class="special-name">Paella Fruits de Mer</div>
+      <div class="special-price">À partir de 80 dh</div>
+    </div>
+    <div class="special-card reveal" style="transition-delay:.1s">
+      <div class="special-icon">🫕</div>
+      <div class="special-name">Tajine Mixte</div>
+      <div class="special-price">À partir de 85 dh</div>
+    </div>
+    <div class="special-card reveal" style="transition-delay:.15s">
+      <div class="special-icon">🥟</div>
+      <div class="special-name">Pastilla Fruits de Mer</div>
+      <div class="special-price">À partir de 80 dh</div>
+    </div>
+    <div class="special-card reveal" style="transition-delay:.2s">
+      <div class="special-icon">🐟</div>
+      <div class="special-name">Plat Grillé Mixte</div>
+      <div class="special-price">À partir de 95 dh</div>
+    </div>
+  </div>
+</div>
+
+<!-- MENU -->
+<div id="menu" style="background:#fff;padding:1px 0">
+<div class="section">
+  <div class="section-label reveal">Notre Carte</div>
+  <div class="section-title reveal">Menu Complet</div>
+  <div class="section-line reveal"></div>
+
+  <div class="cat-tabs reveal">
+    <button class="cat-tab active" onclick="filterCat('all',this)">Tout</button>
+    <button class="cat-tab" onclick="filterCat('plats',this)">Plats</button>
+    <button class="cat-tab" onclick="filterCat('tajines',this)">Tajines</button>
+    <button class="cat-tab" onclick="filterCat('pizzas',this)">Pizzas</button>
+    <button class="cat-tab" onclick="filterCat('salades',this)">Salades &amp; Soupes</button>
+    <button class="cat-tab" onclick="filterCat('boissons',this)">Boissons &amp; Jus</button>
+  </div>
+
+  <div class="food-grid">
+    <!-- PLATS -->
+    <div class="food-card reveal" data-cat="plats" style="transition-delay:.05s">
+      <div class="food-img-placeholder plats">🐟</div>
+      <div class="food-body"><div class="food-name">Plat Grillé</div><div class="food-desc">Sole, calamars, crevettes, merlan, salade, sauce tomate, pain</div><div class="food-footer"><span class="food-price">95 dh</span><button class="add-btn" onclick="addToCart(this,'Plat Grillé',95)">+ Ajouter</button></div></div>
+    </div>
+    <div class="food-card reveal" data-cat="plats" style="transition-delay:.1s">
+      <div class="food-img-placeholder plats">🍤</div>
+      <div class="food-body"><div class="food-name">Plat Friture</div><div class="food-desc">Sole, calamars, crevettes, merlan, salade, sauce tomate, pain</div><div class="food-footer"><span class="food-price">90 dh</span><button class="add-btn" onclick="addToCart(this,'Plat Friture',90)">+ Ajouter</button></div></div>
+    </div>
+    <div class="food-card reveal" data-cat="plats" style="transition-delay:.15s">
+      <div class="food-img-placeholder plats">🥘</div>
+      <div class="food-body"><div class="food-name">Paella Fruits de Mer</div><div class="food-desc">Riz, fruits de mer</div><div class="food-footer"><span class="food-price">80 dh</span><button class="add-btn" onclick="addToCart(this,'Paella Fruits de Mer',80)">+ Ajouter</button></div></div>
+    </div>
+    <div class="food-card reveal" data-cat="plats" style="transition-delay:.2s">
+      <div class="food-img-placeholder plats">🥟</div>
+      <div class="food-body"><div class="food-name">Pastilla Fruits de Mer</div><div class="food-desc">Fruits de mer, fromage</div><div class="food-footer"><span class="food-price">80 dh</span><button class="add-btn" onclick="addToCart(this,'Pastilla Fruits de Mer',80)">+ Ajouter</button></div></div>
+    </div>
+    <!-- TAJINES -->
+    <div class="food-card reveal" data-cat="tajines" style="transition-delay:.05s">
+      <div class="food-img-placeholder tajines">🫕</div>
+      <div class="food-body"><div class="food-name">Tajine Mixte</div><div class="food-desc">Crevettes, calamar, merlan, ferkh, bouzroug, sauce tomate</div><div class="food-footer"><span class="food-price">85 dh</span><button class="add-btn" onclick="addToCart(this,'Tajine Mixte',85)">+ Ajouter</button></div></div>
+    </div>
+    <div class="food-card reveal" data-cat="tajines" style="transition-delay:.1s">
+      <div class="food-img-placeholder tajines">🫕</div>
+      <div class="food-body"><div class="food-name">Tajine Pilpil</div><div class="food-desc">Crevettes, sauce tomate</div><div class="food-footer"><span class="food-price">90 dh</span><button class="add-btn" onclick="addToCart(this,'Tajine Pilpil',90)">+ Ajouter</button></div></div>
+    </div>
+    <div class="food-card reveal" data-cat="tajines" style="transition-delay:.15s">
+      <div class="food-img-placeholder tajines">🫕</div>
+      <div class="food-body"><div class="food-name">Tajine Merlan</div><div class="food-desc">Merlan, sauce tomate</div><div class="food-footer"><span class="food-price">85 dh</span><button class="add-btn" onclick="addToCart(this,'Tajine Merlan',85)">+ Ajouter</button></div></div>
+    </div>
+    <div class="food-card reveal" data-cat="tajines" style="transition-delay:.2s">
+      <div class="food-img-placeholder tajines">🫕</div>
+      <div class="food-body"><div class="food-name">Tajine Ferkh</div><div class="food-desc">Ferkh, sauce tomate</div><div class="food-footer"><span class="food-price">85 dh</span><button class="add-btn" onclick="addToCart(this,'Tajine Ferkh',85)">+ Ajouter</button></div></div>
+    </div>
+    <div class="food-card reveal" data-cat="tajines" style="transition-delay:.25s">
+      <div class="food-img-placeholder tajines">🫕</div>
+      <div class="food-body"><div class="food-name">Tajine Olive &amp; Ail</div><div class="food-desc">Fruits de mer, huile d'olive, ail</div><div class="food-footer"><span class="food-price">85 dh</span><button class="add-btn" onclick="addToCart(this,'Tajine Olive & Ail',85)">+ Ajouter</button></div></div>
+    </div>
+    <!-- PIZZAS -->
+    <div class="food-card reveal" data-cat="pizzas" style="transition-delay:.05s">
+      <div class="food-img-placeholder pizzas">🍕</div>
+      <div class="food-body"><div class="food-name">Pizza Fruits de Mer</div><div class="food-desc">Fruits de mer, fromage</div><div class="food-footer"><span class="food-price">60 dh</span><button class="add-btn" onclick="addToCart(this,'Pizza Fruits de Mer',60)">+ Ajouter</button></div></div>
+    </div>
+    <div class="food-card reveal" data-cat="pizzas" style="transition-delay:.1s">
+      <div class="food-img-placeholder pizzas">🍕</div>
+      <div class="food-body"><div class="food-name">Pizza Royale</div><div class="food-desc">Fruits de mer, poulet, viande hachée</div><div class="food-footer"><span class="food-price">65 dh</span><button class="add-btn" onclick="addToCart(this,'Pizza Royale',65)">+ Ajouter</button></div></div>
+    </div>
+    <div class="food-card reveal" data-cat="pizzas" style="transition-delay:.15s">
+      <div class="food-img-placeholder pizzas">🍕</div>
+      <div class="food-body"><div class="food-name">Pizza Végétarien</div><div class="food-desc">Aux légumes</div><div class="food-footer"><span class="food-price">65 dh</span><button class="add-btn" onclick="addToCart(this,'Pizza Végétarien',65)">+ Ajouter</button></div></div>
+    </div>
+    <div class="food-card reveal" data-cat="pizzas" style="transition-delay:.2s">
+      <div class="food-img-placeholder pizzas">🍕</div>
+      <div class="food-body"><div class="food-name">Pizza Poulet</div><div class="food-desc">Poulet, sauce fromage</div><div class="food-footer"><span class="food-price">60 dh</span><button class="add-btn" onclick="addToCart(this,'Pizza Poulet',60)">+ Ajouter</button></div></div>
+    </div>
+    <div class="food-card reveal" data-cat="pizzas" style="transition-delay:.25s">
+      <div class="food-img-placeholder pizzas">🍕</div>
+      <div class="food-body"><div class="food-name">Pizza Thon</div><div class="food-desc">Sauce tomate, thon, fromage</div><div class="food-footer"><span class="food-price">50 dh</span><button class="add-btn" onclick="addToCart(this,'Pizza Thon',50)">+ Ajouter</button></div></div>
+    </div>
+    <div class="food-card reveal" data-cat="pizzas" style="transition-delay:.3s">
+      <div class="food-img-placeholder pizzas">🍕</div>
+      <div class="food-body"><div class="food-name">Pizza Margarita</div><div class="food-desc">Sauce tomate, fromage</div><div class="food-footer"><span class="food-price">45 dh</span><button class="add-btn" onclick="addToCart(this,'Pizza Margarita',45)">+ Ajouter</button></div></div>
+    </div>
+    <!-- SALADES -->
+    <div class="food-card reveal" data-cat="salades" style="transition-delay:.05s">
+      <div class="food-img-placeholder salades">🥗</div>
+      <div class="food-body"><div class="food-name">Salade Fruits de Mer</div><div class="food-desc">Fruits de mer, tomate, laitue</div><div class="food-footer"><span class="food-price">75 dh</span><button class="add-btn" onclick="addToCart(this,'Salade Fruits de Mer',75)">+ Ajouter</button></div></div>
+    </div>
+    <div class="food-card reveal" data-cat="salades" style="transition-delay:.1s">
+      <div class="food-img-placeholder salades">🥗</div>
+      <div class="food-body"><div class="food-name">Salade Niçoise</div><div class="food-desc">Légumes variés, œuf dur</div><div class="food-footer"><span class="food-price">40 dh</span><button class="add-btn" onclick="addToCart(this,'Salade Niçoise',40)">+ Ajouter</button></div></div>
+    </div>
+    <div class="food-card reveal" data-cat="salades" style="transition-delay:.15s">
+      <div class="food-img-placeholder salades">🥗</div>
+      <div class="food-body"><div class="food-name">Salade Normale</div><div class="food-desc">Laitue, tomate, oignon</div><div class="food-footer"><span class="food-price">10 dh</span><button class="add-btn" onclick="addToCart(this,'Salade Normale',10)">+ Ajouter</button></div></div>
+    </div>
+    <div class="food-card reveal" data-cat="salades" style="transition-delay:.2s">
+      <div class="food-img-placeholder salades">🍲</div>
+      <div class="food-body"><div class="food-name">Soupe Me Gustar</div><div class="food-desc">Bouillon, fruits de mer</div><div class="food-footer"><span class="food-price">10 dh</span><button class="add-btn" onclick="addToCart(this,'Soupe Me Gustar',10)">+ Ajouter</button></div></div>
+    </div>
+    <!-- BOISSONS -->
+    <div class="food-card reveal" data-cat="boissons" style="transition-delay:.05s">
+      <div class="food-img-placeholder boissons">🍊</div>
+      <div class="food-body"><div class="food-name">Jus d'Orange</div><div class="food-desc">Pressé frais</div><div class="food-footer"><span class="food-price">20 dh</span><button class="add-btn" onclick="addToCart(this,&quot;Jus d'Orange&quot;,20)">+ Ajouter</button></div></div>
+    </div>
+    <div class="food-card reveal" data-cat="boissons" style="transition-delay:.1s">
+      <div class="food-img-placeholder boissons">🥭</div>
+      <div class="food-body"><div class="food-name">Jus de Mangue</div><div class="food-desc">Mangue fraîche</div><div class="food-footer"><span class="food-price">20 dh</span><button class="add-btn" onclick="addToCart(this,'Jus de Mangue',20)">+ Ajouter</button></div></div>
+    </div>
+    <div class="food-card reveal" data-cat="boissons" style="transition-delay:.15s">
+      <div class="food-img-placeholder boissons">🍋</div>
+      <div class="food-body"><div class="food-name">Jus de Citron</div><div class="food-desc">Citron pressé</div><div class="food-footer"><span class="food-price">20 dh</span><button class="add-btn" onclick="addToCart(this,'Jus de Citron',20)">+ Ajouter</button></div></div>
+    </div>
+    <div class="food-card reveal" data-cat="boissons" style="transition-delay:.2s">
+      <div class="food-img-placeholder boissons">🍹</div>
+      <div class="food-body"><div class="food-name">Jus Panaché</div><div class="food-desc">Mélange de fruits</div><div class="food-footer"><span class="food-price">30 dh</span><button class="add-btn" onclick="addToCart(this,'Jus Panaché',30)">+ Ajouter</button></div></div>
+    </div>
+    <div class="food-card reveal" data-cat="boissons" style="transition-delay:.25s">
+      <div class="food-img-placeholder boissons">🥤</div>
+      <div class="food-body"><div class="food-name">Coca Cola (50cl)</div><div class="food-footer"><span class="food-price">10 dh</span><button class="add-btn" onclick="addToCart(this,'Coca Cola',10)">+ Ajouter</button></div></div>
+    </div>
+    <div class="food-card reveal" data-cat="boissons" style="transition-delay:.3s">
+      <div class="food-img-placeholder boissons">💧</div>
+      <div class="food-body"><div class="food-name">Sidi Ali (50cl)</div><div class="food-footer"><span class="food-price">5 dh</span><button class="add-btn" onclick="addToCart(this,'Sidi Ali',5)">+ Ajouter</button></div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- REVIEWS SLIDER -->
+<section id="reviews">
+  <div class="reviews-inner">
+    <div class="section-label reveal">Témoignages</div>
+    <div class="section-title reveal">Ce que disent nos clients</div>
+    <div class="section-line reveal"></div>
+
+    <div class="slider-wrap reveal">
+      <div class="slider-track" id="sliderTrack">
+
+        <div class="review-slide">
+          <div class="rev-quote">"</div>
+          <div class="rev-header">
+            <div class="rev-avatar" style="background:#1a4a6b">SM</div>
+            <div><div class="rev-name">Sarah M.</div><div class="rev-date">Mars 2025</div></div>
+          </div>
+          <div class="rev-stars">★★★★★</div>
+          <div class="rev-text">Excellent restaurant ! La paella fruits de mer est incroyable, très généreuse et bien épicée. Le service est rapide et l'accueil chaleureux. Je recommande vivement !</div>
+        </div>
+
+        <div class="review-slide">
+          <div class="rev-quote">"</div>
+          <div class="rev-header">
+            <div class="rev-avatar" style="background:#2d7a4f">KA</div>
+            <div><div class="rev-name">Karim A.</div><div class="rev-date">Février 2025</div></div>
+          </div>
+          <div class="rev-stars">★★★★★</div>
+          <div class="rev-text">Le tajine mixte est vraiment délicieux, les fruits de mer sont très frais. Prix raisonnables pour la qualité proposée. On y revient régulièrement en famille.</div>
+        </div>
+
+        <div class="review-slide">
+          <div class="rev-quote">"</div>
+          <div class="rev-header">
+            <div class="rev-avatar" style="background:#7a2d2d">NB</div>
+            <div><div class="rev-name">Nadia B.</div><div class="rev-date">Janvier 2025</div></div>
+          </div>
+          <div class="rev-stars">★★★★☆</div>
+          <div class="rev-text">La pastilla fruits de mer est une vraie merveille, croustillante et savoureuse. Bonne ambiance, portions généreuses. Légère attente aux heures de pointe mais ça vaut la peine !</div>
+        </div>
+
+        <div class="review-slide">
+          <div class="rev-quote">"</div>
+          <div class="rev-header">
+            <div class="rev-avatar" style="background:#4a3a1a">YO</div>
+            <div><div class="rev-name">Youssef O.</div><div class="rev-date">Décembre 2024</div></div>
+          </div>
+          <div class="rev-stars">★★★★★</div>
+          <div class="rev-text">Meilleur restaurant de fruits de mer de Sidi Moumen ! Le plat grillé mixte est parfait. La soupe Me Gustar pour commencer, c'est un must absolu. Bravo à l'équipe !</div>
+        </div>
+
+        <div class="review-slide">
+          <div class="rev-quote">"</div>
+          <div class="rev-header">
+            <div class="rev-avatar" style="background:#3a1a4a">FZ</div>
+            <div><div class="rev-name">Fatima Z.</div><div class="rev-date">Novembre 2024</div></div>
+          </div>
+          <div class="rev-stars">★★★★★</div>
+          <div class="rev-text">Cadre agréable, personnel sympa et surtout une cuisine délicieuse. La pizza fruits de mer est surprenante et très bonne. Je reviendrai avec plaisir !</div>
+        </div>
+
+        <div class="review-slide">
+          <div class="rev-quote">"</div>
+          <div class="rev-header">
+            <div class="rev-avatar" style="background:#1a3a2d">HM</div>
+            <div><div class="rev-name">Hassan M.</div><div class="rev-date">Octobre 2024</div></div>
+          </div>
+          <div class="rev-stars">★★★★☆</div>
+          <div class="rev-text">Très bon rapport qualité-prix. Le tajine pilpil aux crevettes est savoureux et bien relevé. Endroit idéal pour un déjeuner en famille ou entre amis.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="slider-controls">
+      <button class="slider-btn" onclick="slideBy(-1)">&#8592;</button>
+      <button class="slider-btn" onclick="slideBy(1)">&#8594;</button>
+      <div class="slider-dots" id="sliderDots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<div id="contact" class="section" style="padding-top:5rem">
+  <div class="section-label reveal">Nous Trouver</div>
+  <div class="section-title reveal">Contact &amp; Infos</div>
+  <div class="section-line reveal"></div>
+  <div class="contact-grid reveal">
+    <div class="contact-card">
+      <div style="margin-bottom:1.4rem"><div class="c-label">Téléphone &amp; Réservation</div><div class="c-value"><a href="tel:0721624891">07 21 62 48 91</a></div></div>
+      <div style="margin-bottom:1.4rem"><div class="c-label">Horaires</div><div class="c-value">11h00 – 22h30 · 7j/7</div></div>
+      <div style="margin-bottom:1.4rem"><div class="c-label">Adresse</div><div class="c-value">Sidi Moumen, Casablanca</div></div>
+      <div><div class="c-label">Instagram</div><div class="c-value"><a href="https://instagram.com/_me_gustar" target="_blank">@_me_gustar</a></div></div>
+    </div>
+    <div class="map-card">
+      <div>
+        <div class="c-label" style="color:rgba(255,255,255,.4);margin-bottom:.5rem">Commander par WhatsApp</div>
+        <p>Ajoutez vos plats au panier et passez votre commande directement sur WhatsApp. Nous vous confirmons votre commande en quelques minutes !</p>
+      </div>
+      <a href="https://wa.me/212721624891" target="_blank" class="map-btn">💬 Nous contacter sur WhatsApp</a>
+    </div>
+  </div>
+</div>
+
+<!-- RESERVATION -->
+<section id="reservation">
+  <div class="reservation-inner">
+    <div class="section-label reveal">Réservation</div>
+    <div class="section-title reveal">Réservez votre table</div>
+    <div class="section-line reveal"></div>
+    <p class="reveal" style="color:rgba(255,255,255,.55);font-size:.88rem;line-height:1.7">Remplissez le formulaire ci-dessous et nous vous confirmerons votre réservation par téléphone dans les plus brefs délais.</p>
+    <div class="res-form reveal" id="resForm">
+      <div>
+        <label class="res-label">Nom complet</label>
+        <input class="res-input" type="text" placeholder="Votre nom" id="resName"/>
+      </div>
+      <div>
+        <label class="res-label">Téléphone</label>
+        <input class="res-input" type="tel" placeholder="06 XX XX XX XX" id="resPhone"/>
+      </div>
+      <div>
+        <label class="res-label">Date</label>
+        <input class="res-input" type="date" id="resDate"/>
+      </div>
+      <div>
+        <label class="res-label">Heure</label>
+        <select class="res-input" id="resTime">
+          <option value="">Choisir une heure</option>
+          <option>11:00</option><option>11:30</option>
+          <option>12:00</option><option>12:30</option>
+          <option>13:00</option><option>13:30</option>
+          <option>14:00</option><option>14:30</option>
+          <option>19:00</option><option>19:30</option>
+          <option>20:00</option><option>20:30</option>
+          <option>21:00</option><option>21:30</option>
+          <option>22:00</option>
+        </select>
+      </div>
+      <div>
+        <label class="res-label">Nombre de personnes</label>
+        <select class="res-input" id="resGuests">
+          <option value="">Nombre de personnes</option>
+          <option>1 personne</option><option>2 personnes</option>
+          <option>3 personnes</option><option>4 personnes</option>
+          <option>5 personnes</option><option>6 personnes</option>
+          <option>7 personnes</option><option>8 personnes</option>
+          <option>9+ personnes</option>
+        </select>
+      </div>
+      <div>
+        <label class="res-label">Occasion (optionnel)</label>
+        <select class="res-input" id="resOccasion">
+          <option value="">Aucune occasion particulière</option>
+          <option>Anniversaire 🎂</option>
+          <option>Repas en famille 👨‍👩‍👧</option>
+          <option>Repas d'affaires 💼</option>
+          <option>Dîner romantique 💑</option>
+          <option>Autre</option>
+        </select>
+      </div>
+      <div class="full">
+        <label class="res-label">Message (optionnel)</label>
+        <textarea class="res-input" rows="3" placeholder="Demandes spéciales, allergies..." id="resNote" style="resize:vertical"></textarea>
+      </div>
+      <div class="res-success" id="resSuccess">
+        ✅ Merci ! Votre demande a été envoyée sur WhatsApp. Nous vous confirmerons très bientôt.
+      </div>
+      <button class="res-btn" onclick="submitReservation()">Envoyer ma réservation 📲</button>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<div id="map-section">
+  <div class="section-label reveal">Nous Trouver</div>
+  <div class="section-title reveal">Où sommes-nous ?</div>
+  <div class="section-line reveal"></div>
+  <p class="reveal" style="color:var(--muted);font-size:.88rem;margin-bottom:.5rem">📍 Sidi Moumen, Casablanca — à 350m de la station</p>
+  <div class="map-embed-wrap reveal">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3323.5!2d-7.5!3d33.58!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda7d3b9b9b9b9b9b%3A0x0!2sSidi+Moumen%2C+Casablanca!5e0!3m2!1sfr!2sma!4v1"
+      allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+      title="Localisation Me Gustar">
+    </iframe>
+  </div>
+  <div style="margin-top:1rem;display:flex;gap:1rem;flex-wrap:wrap">
+    <a href="https://maps.google.com/?q=Sidi+Moumen+Casablanca" target="_blank" class="btn-primary" style="font-size:.8rem;padding:.6rem 1.4rem">🗺️ Ouvrir dans Google Maps</a>
+    <a href="https://wa.me/212721624891" target="_blank" class="btn-outline" style="font-size:.8rem;padding:.6rem 1.4rem;color:var(--navy);border-color:rgba(13,43,62,.3)">💬 Nous contacter</a>
+  </div>
+</div>
+
+<footer>
+  &copy; 2025 Restaurant Me Gustar &mdash; Sidi Moumen, Casablanca &nbsp;·&nbsp;
+  <a href="https://instagram.com/_me_gustar" target="_blank">Instagram</a> &nbsp;·&nbsp;
+  <a href="tel:0721624891">07 21 62 48 91</a>
+</footer>
+
+<!-- CART -->
+<div class="cart-bar" id="cartBar">
+  <div class="cart-count" id="cartCount">0</div>
+  <div class="cart-label" id="cartLabel">articles</div>
+  <div class="cart-total" id="cartTotal">0 dh</div>
+  <button class="order-btn" onclick="sendToWhatsApp()">💬 Commander</button>
+  <button class="cart-clear" onclick="clearCart()">vider</button>
+</div>
+
+<script>
+  // NAV SCROLL
+  window.addEventListener('scroll', function(){
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  function toggleMobile(){
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  // SCROLL REVEAL
+  var revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('visible'); }
+    });
+  }, {threshold:0.12});
+  revealEls.forEach(function(el){ observer.observe(el); });
+
+  // SLIDER
+  var current = 0;
+  var slides = document.querySelectorAll('.review-slide');
+  var track = document.getElementById('sliderTrack');
+  var dotsContainer = document.getElementById('sliderDots');
+  var slideW = 332; // card width + gap
+
+  // build dots
+  slides.forEach(function(_, i){
+    var d = document.createElement('div');
+    d.className = 'dot' + (i===0?' active':'');
+    d.onclick = function(){ goTo(i); };
+    dotsContainer.appendChild(d);
+  });
+
+  function goTo(n){
+    var max = slides.length - (window.innerWidth < 700 ? 1 : 2);
+    current = Math.max(0, Math.min(n, max));
+    track.style.transform = 'translateX(-' + (current * slideW) + 'px)';
+    document.querySelectorAll('.dot').forEach(function(d,i){ d.classList.toggle('active', i===current); });
+  }
+
+  function slideBy(dir){ goTo(current + dir); }
+
+  // auto-slide
+  setInterval(function(){ slideBy(1); if(current >= slides.length - 1) goTo(0); }, 4500);
+
+  // CART
+  var cart = [];
+  function addToCart(btn, name, price){
+    var ex = cart.find(function(i){ return i.name===name; });
+    if(ex){ ex.qty++; } else { cart.push({name:name,price:price,qty:1}); }
+    btn.textContent = '✓ Ajouté'; btn.classList.add('added');
+    setTimeout(function(){ btn.textContent = '+ Ajouter'; btn.classList.remove('added'); }, 1400);
+    updateCart();
+  }
+  function updateCart(){
+    var total = cart.reduce(function(s,i){ return s+i.price*i.qty; },0);
+    var count = cart.reduce(function(s,i){ return s+i.qty; },0);
+    document.getElementById('cartCount').textContent = count;
+    document.getElementById('cartTotal').textContent = total+' dh';
+    document.getElementById('cartLabel').textContent = count<=1?'article':'articles';
+    document.getElementById('cartBar').classList.toggle('visible', count>0);
+  }
+  function clearCart(){ cart=[]; updateCart(); }
+  function sendToWhatsApp(){
+    if(!cart.length) return;
+    var total = cart.reduce(function(s,i){ return s+i.price*i.qty; },0);
+    var msg = '';
+    cart.forEach(function(i){ msg += i.qty + 'x ' + i.name + ' — ' + (i.price*i.qty) + ' درهم\n'; });
+    msg += '\nالمجموع : ' + total + ' درهم';
+    window.open('https://wa.me/212721624891?text=' + encodeURIComponent(msg), '_blank');
+  }
+
+  // RESERVATION
+  function submitReservation(){
+    var name = document.getElementById('resName').value.trim();
+    var phone = document.getElementById('resPhone').value.trim();
+    var date = document.getElementById('resDate').value;
+    var time = document.getElementById('resTime').value;
+    var guests = document.getElementById('resGuests').value;
+    var occasion = document.getElementById('resOccasion').value;
+    var note = document.getElementById('resNote').value.trim();
+    if(!name||!phone||!date||!time||!guests){
+      alert('Veuillez remplir tous les champs obligatoires.');
+      return;
+    }
+    var msg = 'Bonjour Me Gustar ! 👋\n\nJe souhaite réserver une table :\n\n';
+    msg += '👤 Nom : ' + name + '\n';
+    msg += '📞 Téléphone : ' + phone + '\n';
+    msg += '📅 Date : ' + date + '\n';
+    msg += '🕙 Heure : ' + time + '\n';
+    msg += '👥 Personnes : ' + guests + '\n';
+    if(occasion) msg += '🎉 Occasion : ' + occasion + '\n';
+    if(note) msg += '📝 Note : ' + note + '\n';
+    msg += '\nMerci !';
+    window.open('https://wa.me/212721624891?text=' + encodeURIComponent(msg), '_blank');
+    document.getElementById('resSuccess').style.display = 'block';
+    document.getElementById('resName').value='';
+    document.getElementById('resPhone').value='';
+    document.getElementById('resDate').value='';
+    document.getElementById('resTime').value='';
+    document.getElementById('resGuests').value='';
+    document.getElementById('resOccasion').value='';
+    document.getElementById('resNote').value='';
+    setTimeout(function(){ document.getElementById('resSuccess').style.display='none'; }, 6000);
+  }
+
+  // FILTER
+  function filterCat(cat, el){
+    document.querySelectorAll('.cat-tab').forEach(function(t){ t.classList.remove('active'); });
+    el.classList.add('active');
+    document.querySelectorAll('.food-card').forEach(function(c){
+      c.classList.toggle('hidden', cat!=='all' && c.dataset.cat!==cat);
+    });
+  }
+</script>
+</body>
+</html>
